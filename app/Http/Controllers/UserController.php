@@ -16,12 +16,14 @@ class UserController extends Controller
      * @param SignupRequest with email, password, name
      * @return Response with token
      */
-    function signup(SignupRequest $request){
-        if($request->validated()){
-            // TODO User Signup Mechanism
-            return Response()->json(['message'=>'Successful'],200);
+    function signup(SignupRequest $request)
+    {
+        if ($request->validated()) {
+            $user = User::create($request->only('name', 'email', 'password'));
+            $token = $user->createToken('access_token');
+            return Response()->json(['message' => 'Successful', 'user' => $user, 'token' => $token->plainTextToken], 200);
         }
-        return Response()->json(['message'=>'Un-authorised'],401);
+        return Response()->json(['message' => 'Un-authorised'], 401);
     }
     //  TODO : User Login
     //  TODO : User Delete
