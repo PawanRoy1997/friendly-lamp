@@ -1,1 +1,4 @@
 .env
+staging.http
+prod.http
+.phpunit.result.cache
