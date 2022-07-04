@@ -8,6 +8,8 @@ use Tests\TestCase;
 
 class UserApiTest extends TestCase
 {
+    use RefreshDatabase;
+
     private $credentials = [
         'name' => 'Someone',
         'email' => 'something@something.com',
@@ -25,8 +27,11 @@ class UserApiTest extends TestCase
         $response->assertCreated();
     }
 
-    public function test_user_login(){
-        $response = $this->json('POST', 'api/users/login', $this->credentials, ['ACCEPT' => 'application/json']);
-        $response->assertOk();
+    public function test_user_login()
+    {
+        $signupResponse = $this->json('POST', 'api/users/signup', $this->credentials, ['ACCEPT' => 'application/json']);
+        $signupResponse->assertCreated();
+        $loginResponse = $this->json('POST', 'api/users/login', $this->credentials, ['ACCEPT' => 'application/json']);
+        $loginResponse->assertOk();
     }
 }
